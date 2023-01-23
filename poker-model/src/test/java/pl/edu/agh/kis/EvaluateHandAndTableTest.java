@@ -2,8 +2,14 @@ package pl.edu.agh.kis;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 import pl.edu.agh.kis.enums.*;
+
+import java.nio.channels.SelectionKey;
+import java.util.HashMap;
+import java.util.List;
+
 public class EvaluateHandAndTableTest {
     @Test
     public void testEvaluateHandAndTable() {
@@ -147,6 +153,8 @@ public class EvaluateHandAndTableTest {
         assertEquals(true, evaluateHandAndTable.isFlush());
         assertEquals(true, evaluateHandAndTable.isStraightFlush());
         assertEquals(true, evaluateHandAndTable.isRoyalFlush());
+        evaluateHandAndTable.evaluateHand();
+        assertEquals(10, evaluateHandAndTable.getCombination().getValue());
     }
 
     @Test
@@ -250,6 +258,57 @@ public class EvaluateHandAndTableTest {
         evaluateHandAndTable.setHandAndTable(player.getHand(), table);
         evaluateHandAndTable.evaluateHand();
         assertEquals(Combination.HIGH_CARD,evaluateHandAndTable.getCombination());
+    }
+    @Test
+    public void testPickWinner(){
+        Player player = new Player();
+        player.setName("Name");
+        SelectionKey selectionKey = mock(SelectionKey.class);
+        player.setSelectionKey(selectionKey);
+        EvaluateHandAndTable evaluateHandAndTable = new EvaluateHandAndTable();
+        Table table = new Table();
+        table.addCard(new Card(Rank.ACE, Suit.CLUBS));
+        table.addCard(new Card(Rank.NINE, Suit.HEARTS));
+        table.addCard(new Card(Rank.EIGHT, Suit.CLUBS));
+        player.addCardToPlayerHand(new Card(Rank.SEVEN, Suit.CLUBS));
+        player.addCardToPlayerHand(new Card(Rank.SIX, Suit.CLUBS));
+        evaluateHandAndTable.setHandAndTable(player.getHand(), table);
+        evaluateHandAndTable.evaluateHand();
+        HashMap<Player, Combination> playerCombinationHashMap = new HashMap<>();
+        playerCombinationHashMap.put(player, evaluateHandAndTable.getCombination());
+        evaluateHandAndTable.pickWinner(playerCombinationHashMap);
+        assertEquals(player.getHand(), evaluateHandAndTable.getHand());
+        assertEquals(table, evaluateHandAndTable.getTable());
+    }
+    @Test
+    public void testPickWinnerWithSameCombination(){
+        Player player = new Player();
+        player.setName("Name");
+        Player player1 = new Player();
+        player1.setName("Name1");
+        SelectionKey selectionKey = mock(SelectionKey.class);
+        SelectionKey selectionKey1 = mock(SelectionKey.class);
+        player.setSelectionKey(selectionKey);
+        player1.setSelectionKey(selectionKey1);
+        EvaluateHandAndTable evaluateHandAndTable = new EvaluateHandAndTable();
+        EvaluateHandAndTable evaluateHandAndTable1 = new EvaluateHandAndTable();
+        Table table = new Table();
+        table.addCard(new Card(Rank.ACE, Suit.CLUBS));
+        table.addCard(new Card(Rank.NINE, Suit.HEARTS));
+        table.addCard(new Card(Rank.EIGHT, Suit.CLUBS));
+        player.addCardToPlayerHand(new Card(Rank.SEVEN, Suit.CLUBS));
+        player.addCardToPlayerHand(new Card(Rank.SIX, Suit.CLUBS));
+        player1.addCardToPlayerHand(new Card(Rank.SEVEN, Suit.CLUBS));
+        player1.addCardToPlayerHand(new Card(Rank.SIX, Suit.CLUBS));
+        HashMap<Player, Combination> playerCombinationHashMap = new HashMap<>();
+        evaluateHandAndTable.setHandAndTable(player.getHand(), table);
+        evaluateHandAndTable.evaluateHand();
+        playerCombinationHashMap.put(player, evaluateHandAndTable.getCombination());
+        evaluateHandAndTable1.setHandAndTable(player1.getHand(), table);
+        evaluateHandAndTable1.evaluateHand();
+        playerCombinationHashMap.put(player1, evaluateHandAndTable1.getCombination());
+        evaluateHandAndTable.pickWinner(playerCombinationHashMap);
+        assertEquals(player.getHand(), evaluateHandAndTable.getHand());
     }
 
 

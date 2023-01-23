@@ -1,10 +1,9 @@
 package pl.edu.agh.kis;
 import org.junit.jupiter.api.Test;
-import pl.edu.agh.kis.enums.Rank;
-import pl.edu.agh.kis.enums.Suit;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class DeckTest {
     @Test
@@ -26,5 +25,11 @@ public class DeckTest {
         Deck deck = new Deck();
         Deck deck1 = deck.factory();
         assertEquals(true, deck.equals(deck1));
+    }
+
+    @Test
+    public void testToString(){
+        Deck actualDeck = new Deck();
+        assertNotEquals("",actualDeck.toString());
     }
 }

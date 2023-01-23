@@ -2,7 +2,7 @@ package pl.edu.agh.kis;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.kis.enums.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HandTest {
     @Test
@@ -41,6 +41,11 @@ public class HandTest {
         hand.initialHand(deck);
         assertEquals(2, hand.cards.size());
         assertEquals(deck_size - 2, deck.cards.size());
+    }
+    @Test
+    public void testToString(){
+        Hand actualHand = new Hand();
+        assertNotEquals("",actualHand.toString());
     }
 
 }
