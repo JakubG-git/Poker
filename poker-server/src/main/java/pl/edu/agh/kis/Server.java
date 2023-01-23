@@ -161,7 +161,7 @@ public class Server {
      * @param args arguments(number of players) not parsed
      * @return number of players
      */
-    protected static int getNumberOfPlayersFromArgs(String[] args) {
+    public static int getNumberOfPlayersFromArgs(String[] args) {
         int numberOfPlayers = 2;
         if(args.length == 1){
             try {
